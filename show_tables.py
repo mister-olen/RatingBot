@@ -21,7 +21,7 @@ async def cmd_help(message):
  ```""")
 
 
-async def create_text_table(pairs_list: list, title: str, column1: (str, int), column2: str) -> list[str]:
+async def create_text_table(pairs_list: list[tuple[str, int]], title: str, column1: str, column2: str) -> list[str]:
     number = 1
     head_line = f"```                      >>> {title}{chr(10)} № | {column1}, {column2}"
     f"{chr(10)}_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _{chr(10)}"
@@ -32,7 +32,6 @@ async def create_text_table(pairs_list: list, title: str, column1: (str, int), c
         first, second = first_or_second
         main_line = f"{main_line} {number}  |  {first}, {second}{chr(10)}"
         number += 1
-        # print(f"main_line len: {len(main_line)}")
         if len(main_line) > 1500:
             temp_list.append(f"{head_line}{main_line}```")
             main_line = ""

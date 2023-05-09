@@ -1,4 +1,3 @@
-
 import os
 import discord
 import basic
@@ -83,4 +82,4 @@ async def on_raw_reaction_remove(payload):
 
 
 if __name__ == '__main__':
-    client.run(os.getenv("TOKEN"))
+    client.run(os.getenv("TOKEN"))  # type: ignore

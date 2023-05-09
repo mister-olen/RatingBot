@@ -1,7 +1,7 @@
 import aiosqlite
 import datetime
 import json
-import aiofiles
+import aiofiles  # type: ignore
 from contextlib import asynccontextmanager
 
 
