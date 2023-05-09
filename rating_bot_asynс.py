@@ -18,8 +18,7 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
-    print(await basic.check_and_create_tables())
-    # maybe have to wait here
+    print(await basic.check_and_create_tables())  # maybe have to wait here, but no exceptions seen yet
     print(f"We have logged in as {client.user}")  # connecting message in console
 
 
@@ -28,7 +27,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    await basic.quick_word_filter(client, message)
+    await basic.quick_word_filter(client, message)  # the very first function, to filter every message
 
     if message.content.startswith("+"):
 
@@ -65,21 +64,6 @@ async def on_message(message):
 
         elif cmd == "+message":
             await message.channel.send(message)
-
-    if client.user in message.mentions:
-
-        msg_text = message.content.split(" ", 1)[1]
-
-        if len(msg_text) > 20:
-            x = 10
-            res = [msg_text[y - x:y] for y in range(x, len(msg_text) + x, x)]
-
-            for m in res:
-                await message.channel.send(m)
-
-
-
-
 
 
 
