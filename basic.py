@@ -3,13 +3,13 @@ import datetime
 import json
 import aiofiles  # type: ignore
 from contextlib import asynccontextmanager
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Union
 
 
 # todo should start using type annotations
 
 
-async def command_input(message) -> Tuple[str, str, List[str], List[str]] | Tuple[None, None, None, List]:
+async def command_input(message) -> Union[Tuple[str, str, List[str], List[str]], Tuple[None, None, None, List]]:
     """
     Converts message text into groups: command, the rest text, separate words after the command, list of id's
     0 - command, 1 - raw_string(without command), 2 - word_list(without command), 3 - id_list

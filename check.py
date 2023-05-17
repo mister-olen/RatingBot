@@ -2,7 +2,7 @@
 from basic import command_input, context_open
 
 
-async def check_specific_command(message, howd_look) -> bool:
+async def check_specific_command(message, howd_look) -> bool:  # type: ignore
     input_result = await command_input(message)
 
     command = input_result[0]
@@ -19,13 +19,13 @@ async def check_specific_command(message, howd_look) -> bool:
                 return False
 
         elif howd_look == '+add_points':
-            if len(word_list) > 1:
-                if len(word_list[1]) > 1:
-                    if (word_list[1][1:].isdigit()) and (
-                            word_list[1][0] in ('+', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
+            if len(word_list) > 1:  # type: ignore
+                if len(word_list[1]) > 1:  # type: ignore
+                    if (word_list[1][1:].isdigit()) and (  # type: ignore
+                            word_list[1][0] in ('+', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')):  # type: ignore
                         return True
                 else:
-                    if word_list[1].isdigit():
+                    if word_list[1].isdigit():  # type: ignore
                         return True
             else:
                 return False
