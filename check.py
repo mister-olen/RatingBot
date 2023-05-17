@@ -2,7 +2,7 @@
 from basic import command_input, context_open
 
 
-async def check_specific_command(message, howd_look):
+async def check_specific_command(message, howd_look) -> bool:
     input_result = await command_input(message)
 
     command = input_result[0]
@@ -35,7 +35,7 @@ async def check_specific_command(message, howd_look):
                 return True
 
 
-async def check_if_element_exists_on_server(table_name, server_id, column_name, element_name):
+async def check_if_element_exists_on_server(table_name, server_id, column_name, element_name) -> bool:
     """Checks if certain element is in certain table with given server_id. Returns True or False"""
     # используется только в add_new_words()
     # shows if the item is in the table

@@ -3,12 +3,13 @@ import datetime
 import json
 import aiofiles  # type: ignore
 from contextlib import asynccontextmanager
+from typing import Tuple, List, Optional
 
 
 # todo should start using type annotations
 
 
-async def command_input(message):
+async def command_input(message) -> Tuple[str, str, List[str], List[str]] | Tuple[None, None, None, List]:
     """
     Converts message text into groups: command, the rest text, separate words after the command, list of id's
     0 - command, 1 - raw_string(without command), 2 - word_list(without command), 3 - id_list
@@ -24,14 +25,14 @@ async def command_input(message):
 
     if ' ' in stripped_msg:  # if no spaces - no any words after the command, which returns None, None, None, []
         temp_list = []
-        split_message = stripped_msg.split(' ')
+        split_message = stripped_msg.split(' ')  # todo edit to .split()
         command = split_message[0]
         raw_string = stripped_msg.split(command, 1)[1].strip()  # second strip if multiple spaces in the message
-        word_list = raw_string.split(' ')
+        word_list = raw_string.split(' ')  # this is a tuple now
         for word in word_list:
             if len(word) > 0:
                 temp_list.append(word)
-        word_list = temp_list
+        word_list = temp_list  # now its a list
 
         for if_mention in word_list:  # checking if mentions in the message
             if if_mention.startswith('<@') and if_mention.endswith('>'):
@@ -40,7 +41,7 @@ async def command_input(message):
     return command, raw_string, word_list, id_list
 
 
-async def quick_word_filter(client, message):
+async def quick_word_filter(client, message) -> Optional[Tuple[List[str], int]]:  # type: ignore
     """Checks if any banned words in the message. Returns word list and the price, or None"""
     server_id = message.guild.id
     user_id = message.author.id
@@ -115,7 +116,7 @@ async def reaction_removing_recording(reaction, message):
         pass
 
 
-async def adding_points(client, server_id, user_id, points_to_add, the_reason):
+async def adding_points(client, server_id, user_id, points_to_add, the_reason) -> str:
     """Adds points to the user. Returns report"""
     person_name = client.get_user(user_id).name
 
@@ -201,7 +202,7 @@ async def log_write(log_text, path='logs.txt'):
         await f.write(f"> {log_text}, {time}{chr(10)}{chr(10)}")
 
 
-async def check_and_create_tables():
+async def check_and_create_tables() -> str:
     if_were_created = ""
     table_create = {
         "banned_words": "CREATE TABLE IF NOT EXISTS banned_words (server_id INTEGER, word TEXT, price INTEGER)",

@@ -2,6 +2,7 @@
 from basic import context_open
 from check import check_specific_command
 import asyncio
+from typing import List, Tuple
 
 
 async def cmd_help(message):
@@ -21,7 +22,7 @@ async def cmd_help(message):
  ```""")
 
 
-async def create_text_table(pairs_list: list[tuple[str, int]], title: str, column1: str, column2: str) -> list[str]:
+async def create_text_table(pairs_list: List[Tuple[str, int]], title: str, column1: str, column2: str) -> list[str]:
     number = 1
     head_line = f"```                      >>> {title}{chr(10)} № | {column1}, {column2}"
     f"{chr(10)}_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _{chr(10)}"

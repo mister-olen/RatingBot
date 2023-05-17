@@ -3,7 +3,7 @@ import check
 from basic import command_input, adding_points, context_open
 
 
-async def adding_points_manually(client, message):
+async def adding_points_manually(client, message) -> str:
     """Adding points to someone. Returns report"""
     if await check.check_specific_command(message, '+add_points'):
         the_input = await command_input(message)
@@ -19,7 +19,7 @@ async def adding_points_manually(client, message):
     return returning_message
 
 
-async def add_new_words(message):
+async def add_new_words(message) -> str:
     """Adds new words to banned words list. Returns report"""
     if await check.check_specific_command(message, '+words('):
 
