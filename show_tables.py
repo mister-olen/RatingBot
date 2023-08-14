@@ -21,11 +21,10 @@ async def cmd_help(message):
  >Top reactions: +top_reactions
  ```""")
 
-
+# todo maybe create a class for this object
 async def create_text_table(pairs_list: List[Tuple[str, int]], title: str, column1: str, column2: str) -> list[str]:
     number = 1
-    head_line = f"```                      >>> {title}{chr(10)} № | {column1}, {column2}"
-    f"{chr(10)}_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _{chr(10)}"
+    head_line = f"```                      >>> {title}{chr(10)} № | {column1}, {column2}{chr(10)}_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _{chr(10)}"
     main_line = ""
     temp_list = []
 
@@ -52,7 +51,7 @@ async def show_banned_words(message):
     tables = await create_text_table(items, 'banned_words', 'word', 'price')
     for string in tables:
         await message.channel.send(string)
-        await asyncio.sleep(0.3)
+        await asyncio.sleep(0.3)  # instead could be a button 'show more'
 
 
 async def show_users(message):

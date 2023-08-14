@@ -10,6 +10,8 @@ from typing import Tuple, List, Optional, Union
 
 
 async def command_input(message) -> Union[Tuple[str, str, List[str], List[str]], Tuple[None, None, None, List]]:
+    # todo maybe best is to make four distinct functions
+    # todo or make flags that will set variables that the function need
     """
     Converts message text into groups: command, the rest text, separate words after the command, list of id's
     0 - command, 1 - raw_string(without command), 2 - word_list(without command), 3 - id_list
@@ -34,8 +36,8 @@ async def command_input(message) -> Union[Tuple[str, str, List[str], List[str]],
                 temp_list.append(word)
         word_list = temp_list  # now its a list
 
-        for if_mention in word_list:  # checking if mentions in the message
-            if if_mention.startswith('<@') and if_mention.endswith('>'):
+        for if_mention in word_list:  # checking if mentions in the message  # todo maybe check with discord mentions?
+            if if_mention.startswith('<@') and if_mention.endswith('>'):  #todo maybe only check beginning symbols
                 id_list.append(if_mention.strip('<!&@>'))  # id number without any symbols. String
 
     return command, raw_string, word_list, id_list
@@ -51,17 +53,17 @@ async def quick_word_filter(client, message) -> Optional[Tuple[List[str], int]]:
     async with context_open(f"SELECT word, price FROM banned_words WHERE server_id = {server_id} ") as banned_words:
         pass
 
-    if msg_text.startswith('+words('):
+    if msg_text.startswith('+words('):  # todo check this - probably a vulnerability
         pass
 
     else:
-        for banned in banned_words:
+        for banned in banned_words:  # fast check on first banned word in the whole message text
             if banned[0] in msg_text:
                 if_banned = True
                 break
 
         if if_banned:
-            word_list = msg_text.split()
+            word_list = msg_text.split()  # splitting to distinct 'words' - maybe another vulnerability ("arC AT" - cat)
             found_words = []
             points_sum = 0
             for word in word_list:
@@ -93,7 +95,7 @@ async def reaction_adding_recording(reaction, user, message):
     reaction_author_id = user.id
     reaction_author_name = user.name
     reaction = reaction
-    message_length = len(message.content)
+    message_length = len(message.content)  # for sorting?
     time = datetime.datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
 
     async with context_open(f"""
@@ -118,7 +120,7 @@ async def reaction_removing_recording(reaction, message):
 
 async def adding_points(client, server_id, user_id, points_to_add, the_reason) -> str:
     """Adds points to the user. Returns report"""
-    person_name = client.get_user(user_id).name
+    person_name = client.get_user(user_id).name  # not necessary maybe
 
     async with context_open(
             f"SELECT EXISTS(SELECT 1 FROM users WHERE server_id = '{server_id}' AND user_id = '{user_id}')") as f:
@@ -129,16 +131,16 @@ async def adding_points(client, server_id, user_id, points_to_add, the_reason) -
                 f"SELECT points, points_log FROM users "
                 f"WHERE (server_id = '{server_id}' AND user_id = '{user_id}')") as f:
             old_points = f[0][0]
-            the_dict = json.loads(f[0][1])
+            the_dict = json.loads(f[0][1])  # todo maybe make a function that does all the convertations
             the_log_list = the_dict['the_log']
         new_points = old_points + points_to_add
 
-        if len(the_log_list) > 5:  # deleting first (oldest) string
+        if len(the_log_list) > 1:  # deleting first (oldest) string  # todo do i really need this? - or somehow do it in else block?
             the_log_list.pop(0)
             # adding new string
             new_log_line = f'{points_to_add} {the_reason}'
             the_log_list.append(new_log_line)
-            the_dict['the_log'] = the_log_list  # - проверить нужно ли, или словарь автоматически изменяется
+            the_dict['the_log'] = the_log_list  # - todo проверить нужно ли, или словарь автоматически изменяется
             # converting back to json
             new_json_str = json.dumps(the_dict)
             # modifying old values in db
@@ -227,3 +229,5 @@ async def check_and_create_tables() -> str:
         return f"Some tables were created: {if_were_created}"
     else:
         return "No new tables were created."
+
+

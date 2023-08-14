@@ -36,8 +36,9 @@ async def check_specific_command(message, howd_look) -> bool:  # type: ignore
 
 
 async def check_if_element_exists_on_server(table_name, server_id, column_name, element_name) -> bool:
+    # todo 'table name' is always 'banned_words' since this function only used in one case, so 'column_name' argument
     """Checks if certain element is in certain table with given server_id. Returns True or False"""
-    # используется только в add_new_words()
+    # используется только в add_new_words()  # todo maybe just use Try-Except there instead of this function?
     # shows if the item is in the table
     async with context_open(
             f"SELECT EXISTS(SELECT 1 FROM {table_name} "
