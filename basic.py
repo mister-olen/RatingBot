@@ -135,32 +135,22 @@ async def adding_points(client, server_id, user_id, points_to_add, the_reason) -
             the_log_list = the_dict['the_log']
         new_points = old_points + points_to_add
 
-        if len(the_log_list) > 1:  # deleting first (oldest) string  # todo do i really need this? - or somehow do it in else block?
+        # adding new string
+        new_log_line = f'{points_to_add} {the_reason}'
+        the_log_list.append(new_log_line)
+        the_dict['the_log'] = the_log_list  # - проверить нужно ли, или словарь автоматически изменяется
+        # converting back to json
+        if len(the_log_list) > 1:  # deleting first (oldest) string
             the_log_list.pop(0)
-            # adding new string
-            new_log_line = f'{points_to_add} {the_reason}'
-            the_log_list.append(new_log_line)
-            the_dict['the_log'] = the_log_list  # - todo проверить нужно ли, или словарь автоматически изменяется
-            # converting back to json
-            new_json_str = json.dumps(the_dict)
-            # modifying old values in db
-            async with context_open(
-                    f"UPDATE users SET name = '{person_name}', points = '{new_points}', points_log = '{new_json_str}' "
-                    f"WHERE (server_id = '{server_id}' AND user_id = '{user_id}')"):
-                returning_message = 'Points added'
+        new_json_str = json.dumps(the_dict)
 
-        else:
-            # adding new string
-            new_log_line = f'{points_to_add} {the_reason}'
-            the_log_list.append(new_log_line)
-            the_dict['the_log'] = the_log_list  # - проверить нужно ли, или словарь автоматически изменяется
-            # converting back to json
-            new_json_str = json.dumps(the_dict)
-            # modifying old values in db
-            async with context_open(
-                    f"UPDATE users SET name = '{person_name}', points = '{new_points}', points_log = '{new_json_str}' "
-                    f"WHERE (server_id = '{server_id}' AND user_id = '{user_id}')"):
-                returning_message = 'Points added'
+
+        # modifying old values in db
+        async with context_open(
+                f"UPDATE users SET name = '{person_name}', points = '{new_points}', points_log = '{new_json_str}' "
+                f"WHERE (server_id = '{server_id}' AND user_id = '{user_id}')"):
+            returning_message = 'Points added'
+
     else:
         very_first_log_str = f"{points_to_add} {the_reason}"
         very_first_dict = {'the_log': [very_first_log_str]}
